@@ -1,0 +1,35 @@
+﻿using Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain.Repositories.MerenjaRepositories
+{
+    public class MerenjaRepository : IMerenjaRepository
+    {
+        private static List<Merenje> merenja = [];
+
+        static MerenjaRepository()
+        {
+
+        }
+
+        public bool DodajMerenje(Merenje merenje)
+        {
+            if(merenja.Count == 0)
+                merenje.Id = 1;
+            else
+                merenje.Id = merenja.Last().Id + 1;
+
+            merenja.Add(merenje);
+            return true;
+        }
+
+        public IEnumerable<Merenje> SvaMerenja()
+        {
+            return merenja;
+        }
+    }
+}
