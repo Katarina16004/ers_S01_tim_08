@@ -1,9 +1,4 @@
 ﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Models
 {
@@ -11,7 +6,7 @@ namespace Domain.Models
     {
         public int Id { get; set; } = 0;
 
-        public TipMerenja Tip {  get; set; }
+        public TipMerenja Tip { get; set; }
 
         public DateTime Timestamp { get; set; }
 
