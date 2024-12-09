@@ -29,7 +29,23 @@ namespace Services.ServerReadDataServices
 
         public Merenje ProcitajNajnovijeMerenjePoDeviceId(int deviceId)
         {
-            throw new NotImplementedException();
+            List<Merenje> merenjaZaDevice = new List<Merenje>();
+            foreach (Merenje m in repo.SvaMerenja())
+            {
+                if (m.DeviceId == deviceId)
+                {
+                    merenjaZaDevice.Add(m);
+                }
+            }
+            Merenje najnovije = merenjaZaDevice[0];
+            foreach (Merenje m in merenjaZaDevice)
+            {
+                if (m.Timestamp > najnovije.Timestamp)
+                {
+                    najnovije = m;
+                }
+            }
+            return najnovije;
         }
 
         public IEnumerable<Merenje> ProcitajNajnovijeMerenjeZaSvakiDevice()

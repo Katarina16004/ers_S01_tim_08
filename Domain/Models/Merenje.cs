@@ -14,14 +14,6 @@ namespace Domain.Models
 
         public int DeviceId { get; set; } = 0;
 
-        // List<Merenje> Meranja = [];
-        // device id == 1
-        // foreach prodjes kroz listu i kazes da li merenje.deviceid == id
-        // imam samo merenja za taj device
-        // order by desc
-        // merenje[0] <== najvece
-        // find max date time
-
         public Merenje() { }
 
         public Merenje(int id, TipMerenja tip, DateTime timestamp, int value, int deviceId)

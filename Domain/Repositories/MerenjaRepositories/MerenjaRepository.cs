@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Enums;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,12 @@ namespace Domain.Repositories.MerenjaRepositories
 
         static MerenjaRepository()
         {
-
+            merenja = new List<Merenje>
+            {
+                new Merenje(1, TipMerenja.ANALOGNO, DateTime.Now, 150, 1),
+                new Merenje(2, TipMerenja.DIGITALNO, DateTime.Now, 200, 2),
+                new Merenje(3, TipMerenja.ANALOGNO, DateTime.Now, 300, 1)
+            };
         }
 
         public bool DodajMerenje(Merenje merenje)
