@@ -69,7 +69,13 @@ namespace Services.ServerReadDataServices
 
         public IEnumerable<Merenje> ProcitajSvaMerenjaPoDeviceId(int deviceId)
         {
-            throw new NotImplementedException();
+            List<Merenje> svaMerenjaUredjaja = new List<Merenje>();
+            foreach (Merenje m in repo.SvaMerenja())
+            {
+                if (m.DeviceId == deviceId)
+                    svaMerenjaUredjaja.Add(m);
+            }
+            return svaMerenjaUredjaja;
         }
     }
 }
