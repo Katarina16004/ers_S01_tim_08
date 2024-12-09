@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using Domain.Models;
+using Domain.Repositories.DeviceRepositories;
 using Domain.Repositories.MerenjaRepositories;
 using Domain.Services;
 using System;
@@ -12,11 +13,18 @@ namespace Services.ServerReadDataServices
 {
     public class ServerReadDataService : IReadData
     {
-        IMerenjaRepository repo = new MerenjaRepository();
+        private readonly IMerenjaRepository repo;
+        private readonly IDeviceRepository repoD;
+
+        public ServerReadDataService(IMerenjaRepository merenjaRepo, IDeviceRepository deviceRepo)
+        {
+            repo = merenjaRepo;
+            repoD = deviceRepo;
+        }
 
         public IEnumerable<Merenje> ProcitajMerenjaPoTipu(TipMerenja tip)
         {
-            List<Merenje> pronadjena = [];
+            List<Merenje> pronadjena = new List<Merenje>();
 
             foreach(Merenje m in repo.SvaMerenja())
             {
@@ -50,7 +58,13 @@ namespace Services.ServerReadDataServices
 
         public IEnumerable<Merenje> ProcitajNajnovijeMerenjeZaSvakiDevice()
         {
-            throw new NotImplementedException();
+            List<Merenje> najnovijaMerenjaSvih=new List<Merenje>();
+            foreach(Device d in  repoD.SviUredjaji())
+            {
+                Merenje najnovijeMerenje = ProcitajNajnovijeMerenjePoDeviceId(d.Id);
+                najnovijaMerenjaSvih.Add(najnovijeMerenje);
+            }
+            return najnovijaMerenjaSvih;
         }
 
         public IEnumerable<Merenje> ProcitajSvaMerenjaPoDeviceId(int deviceId)
