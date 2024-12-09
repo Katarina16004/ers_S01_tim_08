@@ -10,7 +10,7 @@ namespace Domain.Repositories.MerenjaRepositories
 {
     public class MerenjaRepository : IMerenjaRepository
     {
-        private static List<Merenje> merenja = [];
+        private static List<Merenje> merenja = new List<Merenje>();
 
         static MerenjaRepository()
         {
