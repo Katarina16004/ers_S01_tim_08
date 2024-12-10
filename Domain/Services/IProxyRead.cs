@@ -11,5 +11,6 @@ namespace Domain.Services
     {
         public IEnumerable<Merenje> ProcitajSvaMerenjaPoDeviceId(int deviceId);
         public Merenje ProcitajNajnovijeMerenjePoDeviceId(int deviceId);
+        public IEnumerable<Merenje> ProcitajNajnovijeMerenjeZaSvakiDevice();
     }
 }

@@ -84,5 +84,41 @@ namespace Services.ProxyReadServices
             }
             return najnovije;
         }
+        public IEnumerable<Merenje> ProcitajNajnovijeMerenjeZaSvakiDevice()
+        {
+            var lokalnaMerenja = proxySave.GetLokalnaMerenja();
+            List<Merenje> najnovijaMerenja = new List<Merenje>();
+            var najnovijaMerenjaSvih = serverReadDataService.ProcitajNajnovijeMerenjeZaSvakiDevice();
+            if (!lokalnaMerenja.Any())
+            {
+                foreach (var m in najnovijaMerenjaSvih)
+                {
+                    int devId=m.DeviceId;
+                    proxySave.AzurirajLokalnePodatke(devId);
+                }
+                return najnovijaMerenjaSvih;
+            }
+            foreach (var devId in lokalnaMerenja.Keys)
+            {
+                var najnovijeMerenjePoId = serverReadDataService.ProcitajNajnovijeMerenjePoDeviceId(devId);
+                DateTime najnovijiTimestamp = lokalnaMerenja[devId].podaci.Max(m => m.Timestamp);
+
+                if (najnovijeMerenjePoId.Timestamp > najnovijiTimestamp)
+                {
+                    proxySave.AzurirajLokalnePodatke(devId);
+                }
+
+                Merenje najnovije = lokalnaMerenja[devId].podaci[0];
+                foreach (Merenje m in lokalnaMerenja[devId].podaci)
+                {
+                    if (m.Timestamp > najnovije.Timestamp)
+                    {
+                        najnovije = m;
+                    }
+                }
+                najnovijaMerenja.Add(najnovije);
+            }
+            return najnovijaMerenja;
+        }
     }
 }
