@@ -10,5 +10,6 @@ namespace Domain.Services
     public interface IProxyRead
     {
         public IEnumerable<Merenje> ProcitajSvaMerenjaPoDeviceId(int deviceId);
+        public Merenje ProcitajNajnovijeMerenjePoDeviceId(int deviceId);
     }
 }
