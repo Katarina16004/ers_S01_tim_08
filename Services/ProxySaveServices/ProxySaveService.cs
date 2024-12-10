@@ -27,11 +27,31 @@ namespace Services.ProxySaveServices
         }
         public bool AzurirajLokalnePodatke(int deviceId)
         {
+            if (!lokalnaMerenja.ContainsKey(deviceId))
+            {
+                lokalnaMerenja[deviceId] = (new List<Merenje>(), DateTime.Now);
+            }
 
             var svaMerenjaPoId=serverReadDataService.ProcitajSvaMerenjaPoDeviceId(deviceId);
-            if(svaMerenjaPoId == null)
-                return false;
-            lokalnaMerenja[deviceId] = (svaMerenjaPoId.ToList(),DateTime.Now);
+            var lokalniPodaci = lokalnaMerenja[deviceId].podaci;
+            foreach (var ms in svaMerenjaPoId)
+            {
+                bool postoji = false;
+                foreach (var lm in lokalniPodaci)
+                {
+                    if (lm.Id == ms.Id)
+                    {
+                        postoji = true;
+                        break;
+                    }
+                }
+
+                if (!postoji)
+                {
+                    lokalniPodaci.Add(ms);
+                }
+            }
+            lokalnaMerenja[deviceId] = (lokalniPodaci, DateTime.Now);
             return true;
         }
         public bool OčistiZastarelePodatke()

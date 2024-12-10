@@ -28,37 +28,29 @@ namespace Services.ProxyReadServices
         {
             var lokalnaMerenja = proxySave.GetLokalnaMerenja();
             var svaMerenjaPoId= serverReadDataService.ProcitajSvaMerenjaPoDeviceId(deviceId);
-            if (lokalnaMerenja.ContainsKey(deviceId))
-            {
-                DateTime najnovijiTimestamp = lokalnaMerenja[deviceId].podaci[0].Timestamp;
-                foreach(Merenje m in lokalnaMerenja[deviceId].podaci)
-                {
-                    if (m.Timestamp > najnovijiTimestamp)
-                        najnovijiTimestamp = m.Timestamp;
-                }
-
-                bool azuriraj = false; 
-                foreach(Merenje m in svaMerenjaPoId)
-                {
-                    if(m.Timestamp > najnovijiTimestamp)
-                    {
-                        azuriraj = true;
-                        break;
-                    }
-                }
-
-                if (azuriraj)
-                {
-                    proxySave.AzurirajLokalnePodatke(deviceId);
-                }
-
-                return lokalnaMerenja[deviceId].podaci;
-            }
-            else
+            if (!lokalnaMerenja.ContainsKey(deviceId))
             {
                 proxySave.AzurirajLokalnePodatke(deviceId);
                 return svaMerenjaPoId;
             }
+
+            DateTime najnovijiTimestamp = lokalnaMerenja[deviceId].podaci[0].Timestamp;
+            foreach (Merenje m in lokalnaMerenja[deviceId].podaci)
+            {
+                if (m.Timestamp > najnovijiTimestamp)
+                    najnovijiTimestamp = m.Timestamp;
+            }
+
+            foreach (Merenje m in svaMerenjaPoId)
+            {
+                if (m.Timestamp > najnovijiTimestamp)
+                {
+                    proxySave.AzurirajLokalnePodatke(deviceId);
+                    break;
+                }
+            }
+
+            return lokalnaMerenja[deviceId].podaci;
         }
     }
 }
