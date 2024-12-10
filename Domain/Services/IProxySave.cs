@@ -11,6 +11,6 @@ namespace Domain.Services
     {
         public bool AzurirajLokalnePodatke(int deviceId);
         public Dictionary<int, (List<Merenje> podaci, DateTime poslednjiPristup)> GetLokalnaMerenja();
-        public bool OčistiZastarelePodatke();
+        public bool OcistiZastarelePodatke();
     }
 }

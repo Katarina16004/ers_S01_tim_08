@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace Services.ProxySaveServices
 {
@@ -14,12 +14,25 @@ namespace Services.ProxySaveServices
         private readonly IReadData serverReadDataService;
         private readonly IMerenjaRepository merenjaRepo;
         private Dictionary<int, (List<Merenje> podaci, DateTime poslednjiPristup)> lokalnaMerenja;
-
+        private System.Timers.Timer timer;
+        private readonly object lokalnaMerenjaLock = new object();
         public ProxySaveService(IReadData serverReadDataService,IMerenjaRepository merenjaRepo)
         {
             this.serverReadDataService = serverReadDataService;
             this.merenjaRepo = merenjaRepo;
-            lokalnaMerenja = new Dictionary<int, (List<Merenje> podaci, DateTime poslednjiPristup)>();
+            lokalnaMerenja = [];
+
+            timer = new System.Timers.Timer(300000);
+            timer.Elapsed += OnTimedEvent;
+            timer.Start();
+        }
+
+        private void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        {
+            lock (lokalnaMerenjaLock)
+            {
+                OcistiZastarelePodatke();
+            }
         }
         public Dictionary<int, (List<Merenje> podaci, DateTime poslednjiPristup)> GetLokalnaMerenja()
         {
@@ -27,36 +40,57 @@ namespace Services.ProxySaveServices
         }
         public bool AzurirajLokalnePodatke(int deviceId)
         {
-            if (!lokalnaMerenja.ContainsKey(deviceId))
+            lock (lokalnaMerenjaLock)
             {
-                lokalnaMerenja[deviceId] = (new List<Merenje>(), DateTime.Now);
-            }
-
-            var svaMerenjaPoId=serverReadDataService.ProcitajSvaMerenjaPoDeviceId(deviceId);
-            var lokalniPodaci = lokalnaMerenja[deviceId].podaci;
-            foreach (var ms in svaMerenjaPoId)
-            {
-                bool postoji = false;
-                foreach (var lm in lokalniPodaci)
+                if (!lokalnaMerenja.ContainsKey(deviceId))
                 {
-                    if (lm.Id == ms.Id)
+                    lokalnaMerenja[deviceId] = (new List<Merenje>(), DateTime.Now);
+                }
+
+                var svaMerenjaPoId = serverReadDataService.ProcitajSvaMerenjaPoDeviceId(deviceId);
+                var lokalniPodaci = lokalnaMerenja[deviceId].podaci;
+                foreach (var ms in svaMerenjaPoId)
+                {
+                    bool postoji = false;
+                    foreach (var lm in lokalniPodaci)
                     {
-                        postoji = true;
-                        break;
+                        if (lm.Id == ms.Id)
+                        {
+                            postoji = true;
+                            break;
+                        }
+                    }
+
+                    if (!postoji)
+                    {
+                        lokalniPodaci.Add(ms);
+                    }
+                }
+                lokalnaMerenja[deviceId] = (lokalniPodaci, DateTime.Now);
+                return true;
+            }
+        }
+        public bool OcistiZastarelePodatke()
+        {
+            DateTime trenutnoVreme = DateTime.Now;
+            List<int> uredjajiZaBrisanje = new List<int>();
+
+            lock (lokalnaMerenjaLock)
+            {
+                foreach (var lokalnoMerenje in lokalnaMerenja)
+                {
+                    if ((trenutnoVreme - lokalnoMerenje.Value.poslednjiPristup).TotalHours > 24)
+                    {
+                        uredjajiZaBrisanje.Add(lokalnoMerenje.Key);
                     }
                 }
 
-                if (!postoji)
+                foreach (var devId in uredjajiZaBrisanje)
                 {
-                    lokalniPodaci.Add(ms);
+                    lokalnaMerenja.Remove(devId);
                 }
             }
-            lokalnaMerenja[deviceId] = (lokalniPodaci, DateTime.Now);
             return true;
-        }
-        public bool OčistiZastarelePodatke()
-        {
-            throw new NotImplementedException();
         }
     }
 }
