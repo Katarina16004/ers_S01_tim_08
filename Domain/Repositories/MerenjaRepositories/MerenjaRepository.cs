@@ -1,10 +1,5 @@
 ﻿using Domain.Enums;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Repositories.MerenjaRepositories
 {
@@ -24,7 +19,7 @@ namespace Domain.Repositories.MerenjaRepositories
 
         public bool DodajMerenje(Merenje merenje)
         {
-            if(merenja.Count == 0)
+            if (merenja.Count == 0)
                 merenje.Id = 1;
             else
                 merenje.Id = merenja.Last().Id + 1;

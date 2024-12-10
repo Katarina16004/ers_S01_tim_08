@@ -3,11 +3,6 @@ using Domain.Models;
 using Domain.Repositories.DeviceRepositories;
 using Domain.Repositories.MerenjaRepositories;
 using Domain.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.ServerReadDataServices
 {
@@ -26,9 +21,9 @@ namespace Services.ServerReadDataServices
         {
             List<Merenje> pronadjena = new List<Merenje>();
 
-            foreach(Merenje m in repo.SvaMerenja())
+            foreach (Merenje m in repo.SvaMerenja())
             {
-                if(m.Tip == tip)
+                if (m.Tip == tip)
                     pronadjena.Add(m);
             }
 
@@ -58,8 +53,8 @@ namespace Services.ServerReadDataServices
 
         public IEnumerable<Merenje> ProcitajNajnovijeMerenjeZaSvakiDevice()
         {
-            List<Merenje> najnovijaMerenjaSvih=new List<Merenje>();
-            foreach(Device d in  repoD.SviUredjaji())
+            List<Merenje> najnovijaMerenjaSvih = new List<Merenje>();
+            foreach (Device d in repoD.SviUredjaji())
             {
                 Merenje najnovijeMerenje = ProcitajNajnovijeMerenjePoDeviceId(d.Id);
                 najnovijaMerenjaSvih.Add(najnovijeMerenje);

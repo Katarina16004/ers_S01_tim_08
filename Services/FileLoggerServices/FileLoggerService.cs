@@ -1,11 +1,5 @@
 ﻿using Domain.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.FileLoggerServices
 {
@@ -13,7 +7,7 @@ namespace Services.FileLoggerServices
     {
         private string _putanja;
 
-        public FileLoggerService(string putanja="log.txt")
+        public FileLoggerService(string putanja = "log.txt")
         {
             _putanja = putanja;
         }
