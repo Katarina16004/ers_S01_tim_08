@@ -2,6 +2,6 @@
 {
     public interface IProxyInvalidateDataService
     {
-        public Task CheckAndUpdate();
+        public static abstract Task CheckAndUpdate();
     }
 }

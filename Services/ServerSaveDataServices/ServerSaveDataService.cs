@@ -4,7 +4,7 @@ using Domain.Services;
 
 namespace Services.ServerSaveDataServices
 {
-    public class ServerSaveDataService : ISaveData
+    public class ServerSaveDataService : ISaveDataService
     {
         IMerenjaRepository repo = new MerenjaRepository();
 

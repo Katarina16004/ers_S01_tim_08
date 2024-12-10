@@ -2,7 +2,7 @@
 
 namespace Domain.Services
 {
-    public interface ISaveData
+    public interface ISaveDataService
     {
         public bool SaveMerenje(Merenje merenje);
     }

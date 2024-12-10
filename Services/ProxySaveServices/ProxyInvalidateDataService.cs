@@ -9,7 +9,7 @@ namespace Services.ProxySaveServices
     {
         static IProxyDataRepository proxyDataRepository = new ProxyDataRepository();
 
-        public static Task CheckAndUpdate()
+        public static async Task CheckAndUpdate()
         {
             while (true)
             {
@@ -27,8 +27,9 @@ namespace Services.ProxySaveServices
                     if (id_merenja_za_brisanje != -1)
                         proxyDataRepository.Ukloni(id_merenja_za_brisanje);
 
-                    Task.Delay(300); // na svakih 5 minuta proveri jel ima promena
                 }
+
+                await Task.Delay(5000); // na svakih 5 minuta proveri jel ima promena
             }
         }
     }

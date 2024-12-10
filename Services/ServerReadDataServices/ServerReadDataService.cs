@@ -6,7 +6,7 @@ using Domain.Services;
 
 namespace Services.ServerReadDataServices
 {
-    public class ServerReadDataService : IReadData
+    public class ServerReadDataService : IReadDataService
     {
         private readonly IMerenjaRepository repo;
         private readonly IDeviceRepository repoD;

@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Enums;
+using Domain.Models;
 
 namespace Domain.Repositories.ProxyDataRepositories
 {
@@ -30,6 +31,19 @@ namespace Domain.Repositories.ProxyDataRepositories
         public IEnumerable<ProxyMerenjeData> ProcitajSve()
         {
             return proxy_merenja;
+        }
+
+        public IEnumerable<ProxyMerenjeData> ProcitajSvaPoTipu(TipMerenja tip)
+        {
+            List<ProxyMerenjeData> proxy_tip = [];
+
+            foreach (var data in proxy_merenja)
+            {
+                if (data.Tip == tip)
+                    proxy_tip.Add(data);
+            }
+
+            return proxy_tip;
         }
 
         public bool Ukloni(int id)
