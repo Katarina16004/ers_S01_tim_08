@@ -91,7 +91,7 @@ namespace Services.ProxyReadServices
             foreach(var najn_server_data in najnovija_server)
             {
                 var merenjaZaId_lokalno = merenja_lokalno.Where(m => m.DeviceId == najn_server_data.DeviceId);
-                if(merenja_lokalno.Max(m=>m.Timestamp)<najn_server_data.Timestamp)
+                if(!merenjaZaId_lokalno.Any() || merenjaZaId_lokalno.Max(m=>m.Timestamp)<najn_server_data.Timestamp)
                 {
                     //azuriramo merenja za taj deviceId
                     var merenjaZaId_server = serverReadDataService.ProcitajSvaMerenjaPoDeviceId(najn_server_data.DeviceId);
@@ -125,7 +125,32 @@ namespace Services.ProxyReadServices
 
         public IEnumerable<Merenje> ProcitajSvaMerenjaPoDeviceId(int deviceId)
         {
-            throw new NotImplementedException();
+            var merenja_lokalno = proxyDataRepository.ProcitajSve().Where(m => m.DeviceId == deviceId);
+            var merenja_server = serverReadDataService.ProcitajSvaMerenjaPoDeviceId(deviceId);
+
+            if (merenja_lokalno.Count() != merenja_server.Count())
+            {
+                // do update
+                foreach (var server_data in merenja_server)
+                {
+                    if (merenja_lokalno.Any(m => m.Id == server_data.Id) == false)
+                    {
+                        proxyDataRepository.Dodaj(server_data);
+                    }
+                }
+            }
+
+            var izmereno = proxyDataRepository.ProcitajSve().Where(m => m.DeviceId == deviceId);
+            // update last read access
+            DateTime access = DateTime.Now;
+
+            foreach (var merenje in izmereno)
+            {
+                merenje.LastAccessedForRead = access;
+            }
+
+            return izmereno;
+
         }
     }
 }
