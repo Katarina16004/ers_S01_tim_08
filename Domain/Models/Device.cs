@@ -6,8 +6,6 @@
 
         public string Naziv { get; set; } = string.Empty;
 
-        //public List<int> IzvrsenaMerenjaId { get; set; } = [];
-
         public Device() { }
 
         public Device(int id, string naziv)

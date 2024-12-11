@@ -14,6 +14,11 @@ namespace Application
             ISaveDataService serverSaveDataService = new ServerSaveDataService();
             var deviceSendMerenjeService = new DeviceSendMerenjeService(serverSaveDataService);
             Task.Run(()=>deviceSendMerenjeService.PosaljiNovoMerenje());
+
+
+
+
+
             Console.ReadLine();
         }
     }
