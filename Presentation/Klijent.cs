@@ -1,4 +1,6 @@
-﻿using Domain.Repositories.DeviceRepositories;
+﻿using Domain.Enums;
+using Domain.Models;
+using Domain.Repositories.DeviceRepositories;
 using Domain.Services;
 using Services.DeviceSendMerenjeServices;
 using Services.ProxySaveServices;
@@ -21,7 +23,7 @@ namespace Presentation
         {
             while (true)
             {
-                Console.WriteLine("\tIzaberite opciju:");
+                Console.WriteLine("\n\tIzaberite opciju:");
                 Console.WriteLine("1. Citanje svih merenja uredjaja");
                 Console.WriteLine("2. Citanje poslednjeg merenja uredjaja");
                 Console.WriteLine("3. Citanje poslednjeg merenja svakog uredjaja");
@@ -34,21 +36,26 @@ namespace Presentation
 
                 if (unos == "1")
                 {
-                    Console.WriteLine("\n------------------------\nLista uredjaja\n------------------------ ");
-                    var uredjaji=deviceRepository.SviUredjaji();
-                    foreach(var uredjaj in uredjaji)
+                    Console.WriteLine("\n\t------------------------\n\tLista uredjaja\n\t------------------------ ");
+                    var uredjaji = deviceRepository.SviUredjaji();
+                    foreach (var uredjaj in uredjaji)
                     {
-                        Console.WriteLine($"Naziv: {uredjaj.Naziv} , ID: {uredjaj.Id}");
+                        Console.WriteLine($"\tNaziv: {uredjaj.Naziv} , ID: {uredjaj.Id}");
                     }
-                        
-                    Console.Write("------------------------\nUnesite ID uredjaja: ");
+
+                    Console.Write("\t------------------------\n\nUnesite ID uredjaja: ");
                     if (int.TryParse(Console.ReadLine(), out int deviceId))
                     {
-                        var merenja_uredjaja = proxyReadService.ProcitajSvaMerenjaPoDeviceId(deviceId);
-                        Console.WriteLine($"\nMerenja uredjaja {deviceId}:");
-                        foreach (var merenje in merenja_uredjaja)
+                        if (deviceId < 0 || deviceId > 2)
+                            Console.WriteLine("\nMorate uneti ID dostupnih uredjaja!\n");
+                        else
                         {
-                            Console.WriteLine(merenje);
+                            var merenja_uredjaja = proxyReadService.ProcitajSvaMerenjaPoDeviceId(deviceId);
+                            Console.WriteLine($"\nMerenja uredjaja {deviceId}\n------------------------");
+                            foreach (var merenje in merenja_uredjaja)
+                            {
+                                Console.WriteLine(merenje);
+                            }
                         }
                     }
                     else
@@ -56,7 +63,64 @@ namespace Presentation
                         Console.WriteLine("\nMorate uneti broj uredjaja!\n");
                     }
                 }
-              
+                else if (unos == "2")
+                {
+                    Console.WriteLine("\n\t------------------------\n\tLista uredjaja\n\t------------------------ ");
+                    var uredjaji = deviceRepository.SviUredjaji();
+                    foreach (var uredjaj in uredjaji)
+                    {
+                        Console.WriteLine($"\tNaziv: {uredjaj.Naziv} , ID: {uredjaj.Id}");
+                    }
+
+                    Console.Write("\t------------------------\n\nUnesite ID uredjaja: ");
+                    if (int.TryParse(Console.ReadLine(), out int deviceId))
+                    {
+                        if (deviceId < 0 || deviceId > 2)
+                            Console.WriteLine("\nMorate uneti ID dostupnih uredjaja!\n");
+                        else
+                        {
+                            var najnovije_merenje_uredjaja = proxyReadService.ProcitajNajnovijeMerenjePoDeviceId(deviceId);
+                            Console.WriteLine($"\nNajnovije merenje uredjaja {deviceId}\n------------------------");
+                            Console.WriteLine(najnovije_merenje_uredjaja);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nMorate uneti broj uredjaja!\n");
+                    }
+                }
+                else if (unos == "3")
+                {
+                    var najnovija_merenja = proxyReadService.ProcitajNajnovijeMerenjeZaSvakiDevice();
+                    Console.WriteLine("\nNajnovija merenja svih uredjaja\n------------------------");
+                    foreach (var merenje in najnovija_merenja)
+                    {
+                        Console.Write($"Najnovije merenje uredjaja {merenje.DeviceId}:  ");
+                        Console.WriteLine(merenje);
+                    }
+                }
+                else if (unos == "4")
+                {
+                    Console.WriteLine("\nSva DIGITALNA merenja\n------------------------");
+                    var digitalna_merenja = proxyReadService.ProcitajMerenjaPoTipu(TipMerenja.DIGITALNO);
+                    foreach (var merenje in digitalna_merenja)
+                    {
+                        Console.WriteLine(merenje);
+                    }
+                }
+                else if (unos == "5")
+                {
+                    Console.WriteLine("\nSva ANALOGNA merenja\n------------------------");
+                    var analogna_merenja = proxyReadService.ProcitajMerenjaPoTipu(TipMerenja.ANALOGNO);
+                    foreach (var merenje in analogna_merenja)
+                    {
+                        Console.WriteLine(merenje);
+                    }
+                }
+                else if (unos == "6")
+                    Environment.Exit(0);
+                else
+                    Console.WriteLine("\nMorate uneti opcije sa liste!");
             }
         }
         public void PokreniTaskove()
