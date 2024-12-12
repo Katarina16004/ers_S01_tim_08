@@ -8,7 +8,7 @@ using Services.ServerSaveDataServices;
 
 namespace Presentation
 {
-    public class Klijent
+    public class Klijent:IKlijent
     {
         private readonly IProxyReadService proxyReadService;
         private readonly IDeviceRepository deviceRepository;
@@ -31,13 +31,14 @@ namespace Presentation
                 Console.WriteLine("5. Citanje svih analognih merenja");
                 Console.WriteLine("6. Izadji");
                 Console.Write("\nUnesite broj opcije: ");
+                var uredjaji = deviceRepository.SviUredjaji();
 
                 string unos = Console.ReadLine();
 
                 if (unos == "1")
                 {
                     Console.WriteLine("\n\t------------------------\n\tLista uredjaja\n\t------------------------ ");
-                    var uredjaji = deviceRepository.SviUredjaji();
+                   
                     foreach (var uredjaj in uredjaji)
                     {
                         Console.WriteLine($"\tNaziv: {uredjaj.Naziv} , ID: {uredjaj.Id}");
@@ -66,7 +67,7 @@ namespace Presentation
                 else if (unos == "2")
                 {
                     Console.WriteLine("\n\t------------------------\n\tLista uredjaja\n\t------------------------ ");
-                    var uredjaji = deviceRepository.SviUredjaji();
+                    
                     foreach (var uredjaj in uredjaji)
                     {
                         Console.WriteLine($"\tNaziv: {uredjaj.Naziv} , ID: {uredjaj.Id}");
