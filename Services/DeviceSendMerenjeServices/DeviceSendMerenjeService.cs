@@ -34,7 +34,7 @@ namespace Services.DeviceSendMerenjeServices
                 Merenje merenje = new Merenje(idMerenja, tip, DateTime.Now, new Random().Next(50,500), deviceId);
 
                 serverSaveDataService.SaveMerenje(merenje);
-                await Task.Delay(new Random().Next(5000,10000));
+                await Task.Delay(new Random().Next(2000,7000));
             }
         }
     }
