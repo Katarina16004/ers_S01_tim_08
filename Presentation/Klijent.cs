@@ -106,7 +106,7 @@ namespace Presentation
                     var digitalna_merenja = proxyReadService.ProcitajMerenjaPoTipu(TipMerenja.DIGITALNO);
                     foreach (var merenje in digitalna_merenja)
                     {
-                        Console.WriteLine(merenje);
+                        Console.WriteLine($"Uredjaj {merenje.DeviceId}: {merenje}");
                     }
                 }
                 else if (unos == "5")
@@ -115,7 +115,7 @@ namespace Presentation
                     var analogna_merenja = proxyReadService.ProcitajMerenjaPoTipu(TipMerenja.ANALOGNO);
                     foreach (var merenje in analogna_merenja)
                     {
-                        Console.WriteLine(merenje);
+                        Console.WriteLine($"Uredjaj {merenje.DeviceId}: {merenje}");
                     }
                 }
                 else if (unos == "6")
