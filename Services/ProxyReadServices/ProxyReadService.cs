@@ -2,6 +2,7 @@
 using Domain.Models;
 using Domain.Repositories.ProxyDataRepositories;
 using Domain.Services;
+using Services.FileLoggerServices;
 
 namespace Services.ProxyReadServices
 {
@@ -9,11 +10,13 @@ namespace Services.ProxyReadServices
     {
         IReadDataService serverReadDataService;
         IProxyDataRepository proxyDataRepository;
+        ILoggerService fileLoggerService;
 
-        public ProxyReadService(IReadDataService serverReadDataService, IProxyDataRepository proxyDataRepository)
+        public ProxyReadService(IReadDataService serverReadDataService, IProxyDataRepository proxyDataRepository,ILoggerService fileLoggerService)
         {
             this.serverReadDataService = serverReadDataService;
             this.proxyDataRepository = proxyDataRepository;
+            this.fileLoggerService = fileLoggerService;
         }
 
         public IEnumerable<Merenje> ProcitajMerenjaPoTipu(TipMerenja tip)
@@ -24,6 +27,7 @@ namespace Services.ProxyReadServices
             if (merenja_tip_lokalno.Count() != merenja_tip_server.Count())
             {
                 // do update
+                fileLoggerService.Log($"Azuriranje merenja tipa {tip}");
                 foreach (var server_data in merenja_tip_server)
                 {
                     if (merenja_tip_lokalno.Any(m => m.Id == server_data.Id) == false)
@@ -41,7 +45,7 @@ namespace Services.ProxyReadServices
             {
                 merenje.LastAccessedForRead = access;
             }
-
+            fileLoggerService.Log($"Ispis svih merenja tipa {tip}");
             return izmereno;
         }
 
@@ -54,6 +58,7 @@ namespace Services.ProxyReadServices
                 najnovijeZaId_server.Timestamp!= merenjaZaId_lokalno.Max(m => m.Timestamp))
             {
                 // do update
+                fileLoggerService.Log($"Azuriranje podataka za uredjaj {deviceId}");
                 var merenjaZaId_server=serverReadDataService.ProcitajSvaMerenjaPoDeviceId(deviceId);
                 foreach (var server_data in merenjaZaId_server)
                 {
@@ -79,6 +84,7 @@ namespace Services.ProxyReadServices
                 if(m.Timestamp>najnovije.Timestamp)
                     najnovije = m;
             }
+            fileLoggerService.Log($"Ispis najnovijeg merenja uredjaja sa ID-jem {deviceId}");
             return najnovije;
         }
 
@@ -94,6 +100,7 @@ namespace Services.ProxyReadServices
                 if(!merenjaZaId_lokalno.Any() || merenjaZaId_lokalno.Max(m=>m.Timestamp)<najn_server_data.Timestamp)
                 {
                     //azuriramo merenja za taj deviceId
+                    fileLoggerService.Log($"Azuriranje podataka za uredjaj {najn_server_data.DeviceId}");
                     var merenjaZaId_server = serverReadDataService.ProcitajSvaMerenjaPoDeviceId(najn_server_data.DeviceId);
                     foreach (var server_data in merenjaZaId_server)
                     {
@@ -120,6 +127,7 @@ namespace Services.ProxyReadServices
                 }
                 najnovija_lokalno.Add(najnovije);
             }
+            fileLoggerService.Log("Ispis najnovijih merenja svih uredjaja");
             return najnovija_lokalno;
         }
 
@@ -131,6 +139,7 @@ namespace Services.ProxyReadServices
             if (merenja_lokalno.Count() != merenja_server.Count())
             {
                 // do update
+                fileLoggerService.Log($"Azuriranje podataka za uredjaj {deviceId}");
                 foreach (var server_data in merenja_server)
                 {
                     if (merenja_lokalno.Any(m => m.Id == server_data.Id) == false)
@@ -148,7 +157,8 @@ namespace Services.ProxyReadServices
             {
                 merenje.LastAccessedForRead = access;
             }
-
+            //fileLoggerService.Log("Zapamcen poslednji pristup podacima");
+            fileLoggerService.Log($"Ispis svih merenja uredjaja sa ID-jem {deviceId}");
             return izmereno;
 
         }

@@ -33,6 +33,8 @@ namespace Services.DeviceSendMerenjeServices
                 TipMerenja tip = (TipMerenja)new Random().Next(0, Enum.GetValues(typeof(TipMerenja)).Length);
                 Merenje merenje = new Merenje(idMerenja, tip, DateTime.Now, new Random().Next(50,500), deviceId);
 
+                //fileLoggerService.Log("Salje se novo merenje");
+                //Console.WriteLine("Salje se novo merenje");
                 serverSaveDataService.SaveMerenje(merenje);
                 await Task.Delay(new Random().Next(2000,7000));
             }

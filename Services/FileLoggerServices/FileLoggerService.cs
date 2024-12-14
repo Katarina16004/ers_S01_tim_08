@@ -15,7 +15,7 @@ namespace Services.FileLoggerServices
         public bool Log(string poruka)
         {
             using StreamWriter sw = new(_putanja, append: true);
-            sw.Write($"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture)}]: {poruka}\n");
+            sw.Write($"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)}]: {poruka}\n");
             return true;
         }
     }
