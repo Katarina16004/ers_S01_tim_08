@@ -6,11 +6,11 @@ namespace Services.ServerSaveDataServices
 {
     public class ServerSaveDataService : ISaveDataService
     {
-        IMerenjaRepository repo = new MerenjaRepository();
+        IMerenjaRepository merenjaRepository = new MerenjaRepository();
 
         public bool SaveMerenje(Merenje merenje)
         {
-            return repo.DodajMerenje(merenje);
+            return merenjaRepository.DodajMerenje(merenje);
         }
     }
 }
