@@ -24,6 +24,7 @@ namespace Presentation
 
         public void Meni()
         {
+            File.WriteAllText("log.txt",string.Empty);
             fileLoggerService.Log("POKRENUTA APLIKACIJA");
             while (true)
             {
