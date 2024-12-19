@@ -24,7 +24,7 @@ namespace Presentation
 
         public void Meni()
         {
-            fileLoggerService.Log("Pokrenuta aplikacija...");
+            fileLoggerService.Log("POKRENUTA APLIKACIJA");
             while (true)
             {
                 Console.WriteLine("\n\tIzaberite opciju:");
@@ -139,7 +139,7 @@ namespace Presentation
                 else if (unos == "6")
                 {
                     fileLoggerService.Log($"Korisnik je izabrao opciju {unos}");
-                    fileLoggerService.Log("Gasenje aplikacije...");
+                    fileLoggerService.Log("APLIKACIJA ISKLJUCENA");
                     Environment.Exit(0);
                 }
                 else
@@ -154,7 +154,7 @@ namespace Presentation
             Task.Run(() => ProxyInvalidateDataService.CheckAndUpdate());
 
             ISaveDataService serverSaveDataService = new ServerSaveDataService();
-            Task.Run(() => new DeviceSendMerenjeService(serverSaveDataService).PosaljiNovoMerenje());
+            Task.Run(() => new DeviceSendMerenjeService(serverSaveDataService,fileLoggerService).PosaljiNovoMerenje());
         }
     }
 }

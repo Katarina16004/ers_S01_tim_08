@@ -17,10 +17,11 @@ namespace Services.DeviceSendMerenjeServices
         static IDeviceRepository deviceRepository= new DeviceRepository();
         static IMerenjaRepository merenjaRepository = new MerenjaRepository();
         ISaveDataService serverSaveDataService;
-        public DeviceSendMerenjeService(ISaveDataService serverSaveDataService)
+        ILoggerService loggerService;
+        public DeviceSendMerenjeService(ISaveDataService serverSaveDataService, ILoggerService loggerService)
         {
             this.serverSaveDataService = serverSaveDataService;
-
+            this.loggerService = loggerService;
         }
         public async Task PosaljiNovoMerenje()
         {
@@ -33,8 +34,8 @@ namespace Services.DeviceSendMerenjeServices
                 TipMerenja tip = (TipMerenja)new Random().Next(0, Enum.GetValues(typeof(TipMerenja)).Length);
                 Merenje merenje = new Merenje(idMerenja, tip, DateTime.Now, new Random().Next(50,500), deviceId);
 
-                //fileLoggerService.Log("Salje se novo merenje");
-                //Console.WriteLine("Salje se novo merenje");
+                loggerService.Log("Izmereno novo merenje...");
+
                 serverSaveDataService.SaveMerenje(merenje);
                 await Task.Delay(new Random().Next(2000,7000));
             }

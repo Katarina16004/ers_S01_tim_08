@@ -9,13 +9,13 @@ namespace Services.ProxySaveServices
     public class ProxyInvalidateDataService : IProxyInvalidateDataService
     {
         static IProxyDataRepository proxyDataRepository = new ProxyDataRepository();
-
+        static readonly ILoggerService loggerService = new FileLoggerService("log.txt");
         public static async Task CheckAndUpdate()
         {
             while (true)
             {
-                //fileLoggerService.Log("Provera zastarelih podataka");
-                //Console.WriteLine("Provera");
+                await Task.Delay(10000); // na svakih 5 minuta proveri jel ima promena //10sek zbog provere
+                loggerService.Log("Provera zastarelih podataka...");
                 List<ProxyMerenjeData> proxy_data = proxyDataRepository.ProcitajSve().ToList();
                 int id_merenja_za_brisanje = -1;
 
@@ -32,7 +32,7 @@ namespace Services.ProxySaveServices
 
                 }
 
-                await Task.Delay(5000); // na svakih 5 minuta proveri jel ima promena //5sek zbog provere
+               
             }
         }
     }
