@@ -5,11 +5,13 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{612F4363-7290-452A-8276-2B52A170F23B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{194B73C9-0D5A-45A4-A05F-5B9B6E350B8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{194B73C9-0D5A-45A4-A05F-5B9B6E350B8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{D24C2DCB-C320-4508-AD76-1519444E6288}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{D24C2DCB-C320-4508-AD76-1519444E6288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{BF312818-73AC-4E8F-8001-A09ED44A4379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "Presentation\Presentation.csproj", "{BF312818-73AC-4E8F-8001-A09ED44A4379}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{7BA5A800-51E4-4AAA-8AE0-105EC6743D09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BF312818-73AC-4E8F-8001-A09ED44A4379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF312818-73AC-4E8F-8001-A09ED44A4379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF312818-73AC-4E8F-8001-A09ED44A4379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BA5A800-51E4-4AAA-8AE0-105EC6743D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA5A800-51E4-4AAA-8AE0-105EC6743D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA5A800-51E4-4AAA-8AE0-105EC6743D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BA5A800-51E4-4AAA-8AE0-105EC6743D09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
