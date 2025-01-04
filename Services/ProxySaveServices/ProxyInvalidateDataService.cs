@@ -10,29 +10,33 @@ namespace Services.ProxySaveServices
     {
         static IProxyDataRepository proxyDataRepository = new ProxyDataRepository();
         static readonly ILoggerService loggerService = new FileLoggerService("log.txt");
+        public static bool pozvano { get; private set; } = false;
         public static async Task CheckAndUpdate()
         {
+            pozvano = true;
             while (true)
             {
                 await Task.Delay(10000); // na svakih 5 minuta proveri jel ima promena //10sek zbog provere
-                loggerService.Log("Provera zastarelih podataka...");
-                List<ProxyMerenjeData> proxy_data = proxyDataRepository.ProcitajSve().ToList();
-                int id_merenja_za_brisanje = -1;
+                Proveri();
+            }
+        }
+        public static void Proveri()
+        {
+            loggerService.Log("Provera zastarelih podataka...");
+            List<ProxyMerenjeData> proxy_data = proxyDataRepository.ProcitajSve().ToList();
+            int id_merenja_za_brisanje = -1;
 
-                foreach (var data in proxy_data)
+            foreach (var data in proxy_data)
+            {
                 {
+                    if ((DateTime.Now - data.LastAccessedForRead).Hours >= 24)
                     {
-                        if ((DateTime.Now - data.LastAccessedForRead).Hours >= 24)
-                        {
-                            id_merenja_za_brisanje = data.Id;
-                        }
+                        id_merenja_za_brisanje = data.Id;
                     }
-                    if (id_merenja_za_brisanje != -1)
-                        proxyDataRepository.Ukloni(id_merenja_za_brisanje);
-
                 }
+                if (id_merenja_za_brisanje != -1)
+                    proxyDataRepository.Ukloni(id_merenja_za_brisanje);
 
-               
             }
         }
     }
