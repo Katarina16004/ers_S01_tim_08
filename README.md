@@ -1,15 +1,30 @@
-# 🛰️ Proxy Server
+# Proxy Server
 
 ---
 
-## 📌 Opis projekta
+## Opis projekta
 
 Sistem simulira rad pametnih uređaja koji šalju analogna ili digitalna merenja serveru. 
 Komunikacija između klijenta i servera odvija se preko proxy servera, koji kešira i optimizuje pristup podacima.
 
 ---
+## Tehnologije i Arhitekturni Principi
 
-## 🧩 Komponente sistema
+### **Arhitektura:**
+- **Domain Sloj** - Osnovni poslovni entiteti, enumi, repository interfejsi
+- **Services Sloj** - Implementacija poslovne logike, procesiranje podataka
+- **Application Sloj** - Dependency injection, orkestracija aplikacije
+- **Presentation Sloj** - Konzolni UI, handling korisničke interakcije
+- **Tests Sloj** - Unit testovi, integracioni testovi, mock implementacije
+
+### **Design Patterns i Principi:**
+- **Clean Architecture**
+- **Repository Pattern**
+- **Proxy Pattern** 
+- **SOLID Principi**
+
+---
+## Komponente sistema
 
 ### 🟢 **Device**
 - Generiše i automatski šalje merenja na svakih 5 minuta
@@ -35,7 +50,6 @@ Komunikacija između klijenta i servera odvija se preko proxy servera, koji keš
   - Čitanje analognih ili digitalnih merenja
 
 ---
-## ✅ Testiranje
-
+## Testiranje
 - Testirani su modeli, kao i logika unutar servisnih slojeva
-  
+
